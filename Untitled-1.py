@@ -19,12 +19,26 @@ class csv_file:
                 mass.append((element['city'], element['street'], element['house'], element['floor']))
             return mass
         
+class xml_file:
+    def __init__(self, file):
+        self.file = file
+        self.data = self.xml_parser()
+        
+    def xml_parser(self):
+        mass = list()
+        tree = ET.parse(self.file)
+        root = tree.getroot()
+        for item in root.findall('item'):
+            mass.append((item.get('city'), item.get('street'), item.get('house'), item.get('floor')))   
+        return mass
+        
     
 class file_reader:
     def __init__(self, file):
         self.file = file
         if self.file.endswith('.xml'):
-            print("Заглушка")
+            xml = xml_file(self.file)
+            self.data = xml.xml_parser()
 
         else:
             csv = csv_file(self.file)
